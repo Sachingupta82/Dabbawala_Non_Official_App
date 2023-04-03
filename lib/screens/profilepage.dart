@@ -11,10 +11,11 @@ class _profilepageState extends State<profilepage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
         home: SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Color.fromARGB(255, 215, 229, 215),
+        backgroundColor: Color.fromARGB(255, 234, 222, 255),
         body: ListView(
           children: [
             Padding(
@@ -68,7 +69,9 @@ class _profilepageState extends State<profilepage> {
                       SizedBox(
                         width: 330,
                         child: TextFormField(
+                          keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
+
                               fillColor: Colors.white,
                               filled: true,
                               label: Text('Mobile No:'),
@@ -126,7 +129,7 @@ class _profilepageState extends State<profilepage> {
                           SizedBox(width: size.width*0.15),
                           FloatingActionButton.extended(
                             label: Text('Save'), // <-- Text
-                            backgroundColor: Colors.black,
+                            backgroundColor: Color(0xFF4e0064),
                             icon: Icon(
                               Icons.person,
                               // size: 24.0,
@@ -138,7 +141,7 @@ class _profilepageState extends State<profilepage> {
                           SizedBox(width: size.width*0.03),
                           FloatingActionButton.extended(
                             label: Text('Logout'),
-                            backgroundColor: Colors.black,
+                            backgroundColor: Color(0xFF4e0064),
                             icon: Icon(
                               Icons.logout,
                               

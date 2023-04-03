@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "109630919518",
+    "project_id": "dabbawala-1234",
+    "storage_bucket": "dabbawala-1234.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109630919518:android:3284215faf0a57bb60b5cf",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "109630919518-kepkfu5jqudmi0os7k9v0o4fv4rtc9r6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH-0MSQRNpKrMyQixlrtCNR3Pkz7PSUzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109630919518-kepkfu5jqudmi0os7k9v0o4fv4rtc9r6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

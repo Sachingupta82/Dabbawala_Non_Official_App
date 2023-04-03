@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/posts.dart';
 import 'package:flutter_application_1/screens/documentpage.dart';
 import 'package:flutter_application_1/screens/profilepage.dart';
 // import 'package:flutter_application_1/screens/homepage.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flutter_application_1/screens/notification.dart';
+import 'package:flutter_application_1/screens/signup.dart';
 // import 'postpage.dart';
 import 'package:flutter_application_1/screens/homepage.dart';
 import 'package:flutter_application_1/screens/postpage.dart';
@@ -23,7 +24,8 @@ class _NavbarpageState extends State<Navbarpage> {
     Homepage(),
     DocumentPage(),
     postpage(),
-    profilepage()
+    // profilepage(),
+    profilepage1(),
      ];
 
 
@@ -34,7 +36,7 @@ class _NavbarpageState extends State<Navbarpage> {
       extendBody: true,
        bottomNavigationBar: CurvedNavigationBar(
           index: _selectedIndex,
-          backgroundColor: Color.fromARGB(255, 6, 4, 4),
+          backgroundColor:Color(0xFF4e0064),
           items: <Widget>[
             Icon(Icons.home, size: 25),
             Icon(Icons.document_scanner, size: 25),

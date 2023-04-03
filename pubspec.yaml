@@ -30,6 +30,7 @@ environment:
 dependencies:
   curved_navigation_bar: ^1.0.3
   get: ^4.6.5
+  
   flutter:
     sdk: flutter
 
@@ -39,6 +40,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   loading_animation_widget: ^1.2.0+4
   google_fonts: ^4.0.3
+  image_picker: ^0.8.4+3
+  firebase_core: ^2.8.0
+  firebase_auth: ^4.3.0  # If you want to use Firebase Authentication
+  cloud_firestore: ^4.4.5  # If you want to use Cloud Firestore
+  firebase_storage: ^11.0.16  # If you want to use Firebase Storage
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:

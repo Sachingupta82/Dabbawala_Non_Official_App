@@ -8,7 +8,7 @@ class loadingpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 215, 229, 215),
+        backgroundColor: Color.fromARGB(255, 234, 222, 255),
         body: Center(
           child: Column(children: [
             SizedBox(height: 250),
@@ -20,7 +20,7 @@ class loadingpage extends StatelessWidget {
             ),
             Text(
               'कृपया प्रशासन तुमची विनंती मान्य करेपर्यंत प्रतीक्षा करा',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18,),
             ),
             SizedBox(height: 60),
 
@@ -31,7 +31,7 @@ class loadingpage extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 3,
-                        backgroundColor: Colors.white,
+                        backgroundColor: Color(0xFF4e0064),
                         shape: BeveledRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(5),
@@ -47,7 +47,7 @@ class loadingpage extends StatelessWidget {
                       child: const Text(
                         'Enter',
                         style: TextStyle(
-                          color: Color.fromARGB(255, 18, 16, 1),
+                         color: Color.fromARGB(255, 245, 242, 241),
                         ),
                       ),
                     ),

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/notification.dart';
 
@@ -10,6 +14,46 @@ class _DocumentPageState extends State<DocumentPage> {
   bool _isUrgent = false;
   bool _isNotUrgent = false;
   String? _selectedValue= 'select';
+  bool? _urgency ;
+  String _userName = '';
+  String name = '';
+  String location = '';
+  String profilePhotoPath = '';
+
+  void getUserData() async {
+    final phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
+
+    if (phoneNumber != null) {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('Dabbawala_user')
+          .where('phoneNumber', isEqualTo: phoneNumber)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userData = querySnapshot.docs.first.data();
+        setState(() {
+          name = userData['name'];
+          location = userData['location'];
+          profilePhotoPath = userData['Profilephoto'];
+        });
+
+        //   print('Name: $name');
+        //   print('Location: $location');
+        //   print('Profile Photo Path: $profilePhotoPath');
+        // } else {
+        //   print('No user found with the given phone number');
+        // }
+      } else {
+        print('Nothing working');
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +74,7 @@ class _DocumentPageState extends State<DocumentPage> {
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(
                         'https://cdn.dribbble.com/users/612255/screenshots/2607320/media/62e4e83388bfbd18596b59db62d4733c.png?compress=1&resize=400x300'),
+                    // Image.file(File(profilePhotoPath)).image,
                   ),
                 ),
               ),
@@ -39,13 +84,12 @@ class _DocumentPageState extends State<DocumentPage> {
                 child: Column(
                   children: [
                     // SizedBox(height: size.height*0.01),
-                    Text(
-                      'नमस्कार रितेश',
-                      style: TextStyle(fontSize: 25),
+                     Text("नमस्कार $name",
+                      style: TextStyle(fontSize: 23),
                     ),
                     Text(
-                      'तांत्रिक प्रमुख',
-                      style: TextStyle(fontSize: 16),
+                      '$location',
+                      style: TextStyle(fontSize: 16,fontWeight:FontWeight.normal ),
                     ),
                   ],
                 ),
@@ -128,38 +172,39 @@ class _DocumentPageState extends State<DocumentPage> {
                     ],
                     onChanged: (newValue) {
                       setState(() {
-                        _selectedValue = newValue as String?;
+                        _selectedValue = newValue ;
                       });
                     },
                   ),
                 ),
                 SizedBox(height: size.height * 0.04),
-                CheckboxListTile(
+                RadioListTile(
                   title: Text(
                     "जलद",
                     style: TextStyle(fontSize: 25),
                   ),
-                  value: _isUrgent,
-                  activeColor: Colors.black,
+                  value: false,
+                  groupValue: _urgency,
                   onChanged: (value) {
                     setState(() {
-                      _isUrgent = value!;
+                      _urgency = false;
                     });
                   },
                 ),
-                CheckboxListTile(
-                  activeColor: Colors.black,
+                RadioListTile(
                   title: Text(
                     "जलद नाही",
                     style: TextStyle(fontSize: 25),
                   ),
-                  value: _isNotUrgent,
+                  value: true,
+                  groupValue: _urgency,
                   onChanged: (value) {
                     setState(() {
-                      _isNotUrgent = value!;
+                      _urgency = true;
                     });
                   },
                 ),
+
                 SizedBox(height: size.height * 0.03),
                 FloatingActionButton.extended(
                   label: Text(
@@ -171,10 +216,53 @@ class _DocumentPageState extends State<DocumentPage> {
                     Icons.send_to_mobile,
                     size: 24.0,
                   ),
-                  onPressed: () {
-                    //  Navigator.push(context,MaterialPageRoute(builder: (context) => DocumentPage()));
-                  },
+                  
+
+    onPressed: () async {
+  final phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
+
+  if (_selectedValue != 'select' && _urgency != null && phoneNumber != null) {
+    await FirebaseFirestore.instance.collection('documents').add({
+      'documentType': _selectedValue,
+      'urgency': _urgency,
+      'userName': name,
+      'phoneNumber': phoneNumber,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+    // Show a success message
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('यश संदेश'),
+        content: Text('तुमची विनंती पाठवली आहे'),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('ठीक आहे'),
+          ),
+        ],
+      ),
+    );
+
+    // Clear the form values
+    setState(() {
+      _selectedValue = 'select';
+      _urgency = null;
+    });
+  } else {
+    // Show an error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('कृपया कोणताही एक पर्याय निवडा')),
+    );
+  }
+},
+
                 ),
+                
+
               ],
             ),
           ),

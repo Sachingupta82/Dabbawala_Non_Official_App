@@ -21,7 +21,7 @@ class _NavbarpageState extends State<Navbarpage> {
   int _selectedIndex = 0;
 
    List Screen=[
-    Homepage(),
+    const Homepage(),
     DocumentPage(),
     postpage(),
     // profilepage(),

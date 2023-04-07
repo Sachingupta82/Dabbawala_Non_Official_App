@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/notification.dart';
@@ -18,6 +19,50 @@ class _postpageState extends State<postpage> {
   final _postController = TextEditingController();
   File? _image;
   bool _isUploading = false;
+  final CollectionReference _usersRef =
+      FirebaseFirestore.instance.collection('Dabbawala_user');
+
+  String _userName = '';
+  String name = '';
+  String location = '';
+  String profilePhotoPath = '';
+  
+
+  void getUserData() async {
+    final phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
+
+    if (phoneNumber != null) {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('Dabbawala_user')
+          .where('phoneNumber', isEqualTo: phoneNumber)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userData = querySnapshot.docs.first.data();
+        setState(() {
+          name = userData['name'];
+          location = userData['location'];
+          profilePhotoPath = userData['Profilephoto'];
+        });
+
+        //   print('Name: $name');
+        //   print('Location: $location');
+        //   print('Profile Photo Path: $profilePhotoPath');
+        // } else {
+        //   print('No user found with the given phone number');
+        // }
+      } else {
+        print('Nothing working');
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
 
   Future<void> _getImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -52,12 +97,15 @@ class _postpageState extends State<postpage> {
     });
 
     final imageUrl = _image != null ? await _uploadImage(_image!) : null;
+    
 
     try {
       await FirebaseFirestore.instance.collection('posts').add({
         'content': postContent,
         'imageUrl': imageUrl,
         'timestamp': FieldValue.serverTimestamp(),
+        'username': name,
+        
       });
       _formKey.currentState?.reset();
       setState(() {
@@ -96,9 +144,11 @@ class _postpageState extends State<postpage> {
                 child: Container(
                   margin:
                       EdgeInsets.only(left: 8, top: 10, bottom: 1, right: 0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://cdn.dribbble.com/users/612255/screenshots/2607320/media/62e4e83388bfbd18596b59db62d4733c.png?compress=1&resize=400x300'),
+                  child:  CircleAvatar(
+                    backgroundImage:  NetworkImage(
+                        'https://cdn.dribbble.com/users/612255/screenshots/2607320/media/62e4e83388bfbd18596b59db62d4733c.png?compress=1&resize=400x300',
+                  ),
+                    // Image.file(File(profilePhotoPath)).image,
                   ),
                 ),
               ),
@@ -108,13 +158,12 @@ class _postpageState extends State<postpage> {
                 child: Column(
                   children: [
                     // SizedBox(height: size.height*0.01),
-                    Text(
-                      'नमस्कार रितेश',
-                      style: TextStyle(fontSize: 25),
+                     Text("नमस्कार $name",
+                      style: TextStyle(fontSize: 23),
                     ),
                     Text(
-                      'तांत्रिक प्रमुख',
-                      style: TextStyle(fontSize: 16),
+                      '$location',
+                      style: TextStyle(fontSize: 16,fontWeight:FontWeight.normal ),
                     ),
                   ],
                 ),
@@ -151,7 +200,7 @@ class _postpageState extends State<postpage> {
                             fit: BoxFit.cover,
                           ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(45, 30, 30, 10),
+                          padding: const EdgeInsets.fromLTRB(27, 30, 10, 10),
                           child: Row(
                             children: [
                               FloatingActionButton.extended(
@@ -180,7 +229,7 @@ class _postpageState extends State<postpage> {
                                 backgroundColor: Color(0xFF4e0064),
                                 icon: Icon(
                                   Icons.camera_alt_outlined,
-                                  size: 24.0,
+                                  size: 20.0,
                                 ),
                                   onPressed:() => _getImage(ImageSource.gallery),
                                   //  Navigator.push(context,MaterialPageRoute(builder: (context) => DocumentPage()));

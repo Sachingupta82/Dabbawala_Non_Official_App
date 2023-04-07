@@ -356,9 +356,63 @@
 //             ],
 
 //profilepage
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class profilepage1 extends StatelessWidget {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/controller/info_card.dart';
+import 'package:flutter_application_1/screens/SOSPage.dart';
+import 'package:flutter_application_1/screens/profiledetails.dart';
+
+import '../screens/login1.dart';
+
+class profilepage1 extends StatefulWidget {
+  @override
+  State<profilepage1> createState() => _profilepage1State();
+}
+
+class _profilepage1State extends State<profilepage1> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String name = '';
+  String location = '';
+  String profilePhotoPath = '';
+
+  void getUserData() async {
+    final phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
+
+    if (phoneNumber != null) {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('Dabbawala_user')
+          .where('phoneNumber', isEqualTo: phoneNumber)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userData = querySnapshot.docs.first.data();
+        setState(() {
+          name = userData['name'];
+          location = userData['location'];
+          profilePhotoPath = userData['Profilephoto'];
+        });
+
+        //   print('Name: $name');
+        //   print('Location: $location');
+        //   print('Profile Photo Path: $profilePhotoPath');
+        // } else {
+        //   print('No user found with the given phone number');
+        // }
+      } else {
+        print('Nothing working');
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -380,60 +434,122 @@ class profilepage1 extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: 45,
-                  backgroundImage: NetworkImage(
-                      'https://cdn.dribbble.com/users/612255/screenshots/2607320/media/62e4e83388bfbd18596b59db62d4733c.png?compress=1&resize=400x300'),
+                  backgroundImage:  NetworkImage(
+                        'https://cdn.dribbble.com/users/612255/screenshots/2607320/media/62e4e83388bfbd18596b59db62d4733c.png?compress=1&resize=400x300'),
+                  // Image.file(File(profilePhotoPath)).image,
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  'Ritesh Andhere',
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(
-                  'Technical Head',
-                  style: TextStyle(fontSize: 15),
-                ),
+                      "नमस्कार $name",
+                      style: TextStyle(fontSize: 20),
+                    ),
+               Text(
+                      '$location',
+                      style: TextStyle(fontSize: 16),
+                    ),
                 Divider(thickness: 1.5),
-                SizedBox(height: size.height*0.03),
+                SizedBox(height: size.height * 0.03),
                 SizedBox(
-                  width: size.width*0.8,
+                  width: size.width * 0.8,
                   child: FloatingActionButton.extended(
+                    heroTag: 'profile1',
                     backgroundColor: Color.fromARGB(255, 98, 53, 114),
-                    
-                      onPressed: () {}, label: Text('Profile'),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.circular(22)),
-                      ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePage2(),
+                        ),
+                      );
+                    },
+                    label: Text('Profile'),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusDirectional.circular(22)),
+                  ),
                 ),
-                SizedBox(height: size.height*0.03),
+                SizedBox(height: size.height * 0.03),
                 SizedBox(
-                  width: size.width*0.8,
+                  width: size.width * 0.8,
                   child: FloatingActionButton.extended(
+                    heroTag: 'profile2',
                     backgroundColor: Color.fromARGB(255, 98, 53, 114),
-                    
-                      onPressed: () {}, label: Text('Customer'),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.circular(22)),
-                      ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UserCardsPage( location: 'location')),
+                      );
+                      
+                    },
+                    label: Text('Customer'),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusDirectional.circular(22)),
+                  ),
                 ),
-                SizedBox(height: size.height*0.03),
+                SizedBox(height: size.height * 0.03),
                 SizedBox(
-                  width: size.width*0.8,
+                  width: size.width * 0.8,
                   child: FloatingActionButton.extended(
+                    heroTag: 'profile3',
                     backgroundColor: Color.fromARGB(255, 98, 53, 114),
-                    
-                      onPressed: () {}, label: Text('SOS'),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.circular(22)),
-                      ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PhoneNumbersScreen()),
+                      );
+                    },
+                    label: Text('SOS'),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusDirectional.circular(22)),
+                  ),
                 ),
-                SizedBox(height: size.height*0.03),
+                SizedBox(height: size.height * 0.03),
                 SizedBox(
-                  width: size.width*0.8,
+                  width: size.width * 0.8,
                   child: FloatingActionButton.extended(
+                    heroTag: 'profile4',
                     backgroundColor: Color.fromARGB(255, 98, 53, 114),
+                    onPressed: (){
+                      
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Confirm Logout'),
+        content: Text('Are you sure you want to log out?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('CANCEL'),
+          ),
+          TextButton(
+            onPressed: () async {
+              // Sign out the user
+              await _auth.signOut();
+
+              // Navigate to the phone authentication page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => PhoneAuthPage()),
+              );
+            },
+            child: Text('LOGOUT'),
+          ),
+        ],
+      );
+    },
+  );
+},
+
                     
-                      onPressed: () {}, label: Text('Logout'),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.circular(22)),
-                      ),
+                    label: Text('Logout'),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusDirectional.circular(22)),
+                  ),
                 ),
               ]),
             ),

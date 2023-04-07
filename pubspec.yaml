@@ -46,6 +46,11 @@ dependencies:
   cloud_firestore: ^4.4.5  # If you want to use Cloud Firestore
   firebase_storage: ^11.0.16  # If you want to use Firebase Storage
   url_launcher: ^6.1.10
+  firebase_database: ^10.1.0
+  shared_preferences: ^2.1.0
+  flutter_phone_direct_caller: ^2.1.1
+  
+  
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +77,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/docs.png
+    - images/dabba.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

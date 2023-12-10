@@ -1,13 +1,15 @@
-# flutter_application_1
+# Dabbawala Non Official App
 
 This project aims to help the Mumbai Dabbawalas(130 years old) organization for various inner problems.
 Some of the features of this app is listed here:
 
-*Posting latest events photos and description
-*Getting auto generated documents .
-*Displaying location wise customers details.
-*Displaying alert messages.
-*Showing Emergency contacts.
+<ul>
+  <li>Posting latest events photos and description.</li>
+  <li>Getting auto generated documents.</li>
+  <li>Displaying location wise customers details.</li>
+  <li>Displaying alert messages.</li>
+  <li>Showing Emergency contacts.</li>
+</ul>
 
 Here are the few Screenshots of the few modules of App:
 
